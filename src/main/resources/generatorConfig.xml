@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!--<properties resource="mybatis-generator/generator.properties"/>-->
+
+        <classPathEntry location="D:\MajorSofe\ToolsBar\MavenJar\mysql\mysql-connector-java\8.0.19\mysql-connector-java-8.0.19.jar"/>
+
+    <!--
+    targetRuntime:MyBatis3 复杂版本
+    -->
+    <context id="my" targetRuntime="MyBatis3Simple">
+        <commentGenerator>
+            <property name="suppressDate" value="false"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接参数 -->
+        <jdbcConnection
+                driverClass="com.mysql.cj.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/db_smbms?serverTimezone=Asia/Shanghai"
+                userId="root"
+                password="123456">
+        </jdbcConnection>
+
+        <!-- 实体类的包名和存放路径 -->
+        <javaModelGenerator targetPackage="com.smbms.vo"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成映射文件*.xml的位置-->
+        <sqlMapGenerator targetPackage="mappers"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成DAO的包名和位置 -->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.smbms.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- tableName：数据库中的表名或视图名；domainObjectName：生成的实体类的类名-->
+        <table tableName="user" domainObjectName="User"/>
+
+    </context>
+</generatorConfiguration>

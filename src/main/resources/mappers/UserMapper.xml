@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smbms.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.smbms.vo.User">
+        <!--
+        column:主键在数据库中的列名
+        property：主键在vo中的列名
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="userCode" jdbcType="INTEGER" property="userCode"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="userPwd" jdbcType="VARCHAR" property="userPwd"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate"/>
+        <result column="userRole" jdbcType="VARCHAR" property="userRole"/>
+        <result column="modifyDate" jdbcType="TIMESTAMP" property="modifyDate"/>
+    </resultMap>
+
+    <sql id="Column_List">
+        id,userCode,userName,userPwd,phone,address,gender,creationDate,userRole,modifyDate
+    </sql>
+
+    <delete id="deleteByPrimaryKey1" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.smbms.vo.User">
+    insert into user (id, userName,userPwd, phone, address, gender, creationDate, userRole, modifyDate,userCode)
+    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+      #{userPwd,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{gender,jdbcType=VARCHAR}, #{creationDate,jdbcType=DATE}, #{userRole,jdbcType=VARCHAR},
+      #{modifyDate,jdbcType=DATE}, #{userCode,jdbcType=INTEGER})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.smbms.vo.User">
+    update user
+    set userCode = #{userCode,jdbcType=INTEGER},
+      userName = #{userName,jdbcType=VARCHAR},
+      userPwd = #{userPwd,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=VARCHAR},
+      creationDate = #{creationDate,jdbcType=TIMESTAMP},
+      userRole = #{userRole,jdbcType=VARCHAR},
+      modifyDate = #{modifyDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, userCode, userName, userPwd, phone, address, gender, creationDate, userRole,
+    modifyDate
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectById" parameterType="int" resultType="com.smbms.vo.User">
+            select * from user where id =#{id}
+  </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, userCode, userName, userPwd, phone, address, gender, creationDate, userRole, 
+    modifyDate
+    from user
+  </select>
+
+    <select id="queryUserByName" parameterType="string" resultType="com.smbms.vo.User">
+        select
+        <include refid="Column_List"></include>
+        from
+        user
+        where
+        userName =#{userNam}
+    </select>
+
+    <select id="selectByTarget" parameterType="com.smbms.vo.User" resultMap="BaseResultMap">
+        select * from user where 1=1
+        <if test="userName!= null and userName!= ''">
+            and userName=#{userName}
+        </if>
+        <if test="phone != null and phone != ''">
+            and phone=#{phone}
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="int">
+        delete from user where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

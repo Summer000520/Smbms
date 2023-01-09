@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smbms.dao.OrderMapper">
+    <resultMap id="BaseResultMap" type="com.smbms.vo.Order">
+        <!--
+        column:主键在数据库中的列名
+        property：主键在vo中的列名
+        -->
+        <result column="id" jdbcType="INTEGER" property="id"></result>
+        <result column="productName" jdbcType="VARCHAR" property="productName"></result>
+        <result column="productCount" jdbcType="VARCHAR" property="productCount"></result>
+        <result column="totalPrice" jdbcType="DECIMAL" property="totalPrice"></result>
+        <result column="isPayment" jdbcType="VARCHAR" property="isPayment"></result>
+        <result column="creationDate" jdbcType="TIMESTAMP" property="creationDate"></result>
+        <result column="providerName" jdbcType="VARCHAR" property="providerName"></result>
+        <result column="userName" jdbcType="VARCHAR" property="userName"></result>
+
+    </resultMap>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select * from bill
+    </select>
+
+    <select id="selectById" parameterType="integer" resultMap="BaseResultMap">
+        select * from bill where id =#{id}
+    </select>
+
+    <insert id="insertOrder" parameterType="com.smbms.vo.Order">
+        insert into bill(id,productName,productCount,totalPrice,
+        isPayment,creationDate,providerName,userName) values (#{id},#{productName},
+        #{productCount},#{totalPrice},#{isPayment},#{creationDate},#{providerName},#{userName})
+    </insert>
+
+    <select id="selectByTarget" parameterType="com.smbms.vo.Order" resultMap="BaseResultMap">
+        select * from bill where 1=1
+        <if test="productName!= null and productName!= ''">
+            and productName=#{productName}
+        </if>
+        <if test="creationDate!=null">
+            and creationDate=#{creationDate}
+        </if>
+    </select>
+
+    <select id="selectByTarget02" parameterType="com.smbms.vo.Order" resultMap="BaseResultMap">
+        select * from bill where 1=1
+        <if test="productName!= null and productName!= ''">
+            and productName=#{productName}
+        </if>
+        <if test="providerName!=null and providerName != ''">
+            and providerName=#{providerName}
+        </if>
+        <if test="userName!=null and userName != ''">
+            and userName=#{userName}
+        </if>
+    </select>
+
+    <update id="updateOrder" parameterType="com.smbms.vo.Order">
+        update bill
+        set productName =#{productName},
+            productCount =#{productCount},
+            totalPrice =#{totalPrice},
+            isPayment =#{isPayment},
+            creationDate =#{creationDate},
+            providerName =#{providerName},
+            userName =#{userName}
+        where  id =#{id}
+    </update>
+
+    <delete id="deleteOrder" parameterType="int">
+        delete from bill where id =#{id}
+    </delete>
+
+    <delete id="deleteById" parameterType="int">
+        delete from bill where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

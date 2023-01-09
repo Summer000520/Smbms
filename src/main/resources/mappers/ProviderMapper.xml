@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smbms.dao.ProviderMapper">
+
+    <sql id="Column_List">
+        id,proName,proContact,proPhone,proAddress,createdDate
+    </sql>
+
+    <select id="selectAll" resultType="com.smbms.vo.Provider">
+        select * from provider
+    </select>
+
+    <select id="selectByName" parameterType="String" resultType="com.smbms.vo.Provider">
+        select * from provider where proName =#{proName}
+    </select>
+
+    <select id="selectById" parameterType="Integer" resultType="com.smbms.vo.Provider">
+        select * from provider where id =#{id}
+    </select>
+
+    <insert id="insertProvider" parameterType="com.smbms.vo.Provider">
+        insert into provider(proName,proContact,proPhone,proAddress,createdDate) values
+        (#{proName},#{proContact},#{proPhone},#{proAddress},#{createdDate})
+    </insert>
+
+    <update id="updateProvider" parameterType="com.smbms.vo.Provider">
+        update provider
+        set proName=#{proName},
+            proContact=#{proContact},
+            proPhone=#{proPhone},
+            proAddress=#{proAddress},
+            createdDate=#{createdDate}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteProvider" parameterType="int">
+        delete from provider where id =#{id}
+    </delete>
+
+    <delete id="deleteByPrimaryKey" parameterType="int">
+        delete from provider where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByParams" parameterType="com.smbms.vo.Provider" resultType="com.smbms.vo.Provider">
+        select
+            <include refid="Column_List"></include>
+        from
+            provider
+        <where>
+            <if test="proName != null and proName != '' ">
+                and proName=#{proName}
+            </if>
+            <if test="proContact != null and proContact != ''">
+                and proContact=#{proContact}
+            </if>
+            <if test="proPhone != null and proPhone != '' ">
+                and proPhone =#{proPhone}
+            </if>
+        </where>
+    </select>
+
+</mapper>
